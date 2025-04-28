@@ -2,19 +2,25 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import Logo from "./Logo";
 import "./styles/Login.css";
+import { authorize } from "../utils/auth";
 
-const Login = () => {
+const Login = ({ handleLogin, errorMessage }) => {
   const [data, setData] = useState({
-    username: "",
-    password: "",
+    email: "",
+    password: ""
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleLogin(data);
   };
 
   return (
@@ -24,14 +30,14 @@ const Login = () => {
         This app contains highly sensitive information. Please sign in or
         register to access CryptoDucks.
       </p>
-      <form className="login__form">
-        <label htmlFor="username">Login:</label>
+      <form className="login__form" onSubmit={handleSubmit}>
+        <label htmlFor="email">Login:</label>
         <input
-          id="username"
+          id="email"
           required
-          name="username"
+          name="email"
           type="text"
-          value={data.username}
+          value={data.email}
           onChange={handleChange}
         />
         <label htmlFor="password">Password:</label>
@@ -44,6 +50,7 @@ const Login = () => {
           onChange={handleChange}
         />
         <div className="login__button-container">
+          {errorMessage && <span className="login__error">{errorMessage}</span>}
           <button type="submit" className="login__link">
             Log in
           </button>

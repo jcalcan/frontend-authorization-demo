@@ -3,27 +3,41 @@ import { useState } from "react";
 import Logo from "./Logo";
 import "./styles/Register.css";
 
-const Register = () => {
+const Register = ({ handleRegistration }) => {
   const [data, setData] = useState({
     username: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (data.password != data.confirmPassword) {
+      console.error("Passwords don't match!");
+      return;
+    }
+    handleRegistration({
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword
+    });
   };
 
   return (
     <div className="register">
       <Logo title={"CryptoDucks"} />
       <p className="register__welcome">Please register.</p>
-      <form className="register__form">
+      <form className="register__form" onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input
           id="username"
